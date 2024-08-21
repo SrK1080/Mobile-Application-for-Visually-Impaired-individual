@@ -1,0 +1,149 @@
+\def\ucc@x@pt{12pt}
+\def\ucc@x@side{oneside}
+\def\ucc@spacing{singlespacing}
+
+\newif\ifucc@with@lof
+\newif\ifucc@with@lot
+\newif\ifucc@with@toc
+\ucc@with@toctrue
+\ucc@with@lottrue
+\ucc@with@loftrue
+
+\newif\ifucc@draft
+\ucc@draftfalse
+
+\def\ucc@process@options{%
+}
+
+\def\ucc@externs{}
+\def\externs#1{\gdef\ucc@externs{#1}}
+\def\ucc@get@externs{%
+   \if\@empty\ucc@externs%
+       External examiners undefined. Set them with \protect\texttt{\textbackslash externs} command in preamble: use \protect\texttt{\backslash and} to separate multiple External Examiners.%
+   \else%
+       \expandafter\ucc@get@the@externs\ucc@externs\and\ucc@end@externs%
+   \fi%
+}
+\def\ucc@get@the@externs#1\and#2\ucc@end@externs{%
+    \def\ucc@temp{#2}%
+    \ifx\@empty\ucc@temp%
+        #1%
+    \else%
+        #1 \\ \ucc@get@the@externs #2\ucc@end@externs%
+    \fi%
+}
+
+\def\ucc@supervisor{}
+\def\supervisor#1{\gdef\ucc@supervisor{#1}}
+\def\ucc@get@supervisor{%
+   \ifx\@empty\ucc@supervisor%
+       \textcolor{red}{Supervisor undefined. Set it with \protect\texttt{\textbackslash supervisor} command in preamble.}%
+   \else%
+       \ucc@supervisor%
+   \fi%
+}
+\def\ucc@secondreader{}
+\def\secondreader#1{\gdef\ucc@secondreader{#1}}
+\def\ucc@get@second@reader{%
+   \ifx\@empty\ucc@secondreader%
+       \textcolor{red}{Second reader undefined. Set it with \protect\texttt{\textbackslash secondreader} command in preamble.}%
+   \else%
+       \ucc@secondreader%
+   \fi%
+}
+
+\def\ucc@date{\today}
+\def\ucc@degree{\textcolor{red}{\Large{%
+                Eejit! Degree not defined.
+                Define it by passing the correct degree option to the class.
+                See Table~\ref{tab:options} for the available options\ldots}}}
+\def\ucc@department{School of Computer Science \&\ Information Technology}
+\def\ucc@university@name{University College, Cork}
+
+% From classicthesis.
+\def\ucc@make@toc{%
+    \setcounter{tocdepth}{2}
+    \minitoc\tableofcontents
+    \markboth{\contentsname}{\contentsname}
+}
+
+\def\ucc@make@lof{%
+    %\addcontentsline{toc}{chapter}{\listfigurename}
+    \minilof\listoffigures
+    \markboth{\contentsname}{\contentsname}
+}
+
+\def\ucc@make@lot{%
+    %\addcontentsline{toc}{chapter}{\listtablename}
+    \minilot\listoftables
+    \markboth{\contentsname}{\contentsname}
+}
+
+\newif\ifucc@dedication
+\ucc@dedicationfalse
+\long\def\dedication#1{\ucc@dedicationtrue\long\def\ucc@dedication@text{#1}}
+\def\ucc@make@dedication{%
+    \ifucc@dedication%
+        \cleardoublepage%
+        \chapter*{Dedication}
+        \ucc@dedication@text%
+    \fi%
+}
+
+\newif\ifucc@acknowledgement
+\ucc@acknowledgementfalse
+\long\def\acknowledgement#1{\ucc@acknowledgementtrue\long\def\ucc@acknowledgement@text{#1}}
+\def\ucc@make@acknowledgement{%
+    \ifucc@acknowledgement%
+        \cleardoublepage%
+        \chapter*{Acknowledgements}
+        \ucc@acknowledgement@text%
+    \fi%
+}
+
+\newcommand\addToFrontMatter{}
+
+\def\ucc@preamble{%
+    %\def\abstract\abstract@error
+    % From memman.
+    \def\fnum@table{\textbf{\tablename~\thetable}}
+    \def\fnum@figure{\textbf{\figurename~\thefigure}}
+    %
+    \raggedbottom
+    \selectlanguage{english}
+    \pagenumbering{roman}
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    % Frontmatter
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    \frontmatter
+    \ucc@make@title@page%
+    \ucc@make@abstract%
+    \ucc@make@declaration%
+    \ucc@make@acknowledgement%
+    \ucc@make@dedication%
+    \cleardoublepage%
+    \ifucc@with@toc\ucc@make@toc\fi%
+    \ifucc@with@lot\ucc@make@lot\fi%
+    \ifucc@with@lof\ucc@make@lof\fi%
+    \addToFrontMatter%
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    % Main matter.
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    \clearpage%
+    \cleardoublepage%
+    \mainmatter%
+    \pagestyle{fancy}%
+    \ifx\ucc@x@style\ucc@both@style%
+        \renewcommand{\chaptermark}[1]{\markboth{\MakeTextUppercase{##1}}{}}
+        \renewcommand{\sectionmark}[1]{\markright{\thesection\ \MakeTextUppercase{##1}}}
+        \fancyhf{}
+        \fancyhead[LE,RO]{\bfseries\thepage}
+        \fancyhead[LO]{\bfseries\rightmark}
+        \fancyhead[RE]{\bfseries\leftmark}
+        \fancypagestyle{plain}{%
+            \fancyhead{}%
+            \renewcommand\headrulewidth{0pt}%
+        }%
+    \fi%
+    \pagenumbering{arabic}%
+}
