@@ -2,13 +2,13 @@ Created an Android app to help visually impaired people with the specific needs.
 
 Features:
 
-Real Time Text Detection
+1.Real Time Text Detection
 
-Real Time Object and Distance Estimation
+2.Real Time Object and Distance Estimation
 
-Simple Interface which inherits Touch Gesture
+3.Simple Interface which inherits Touch Gesture
 
-Auditory Feedback 
+4.Auditory Feedback 
 
 Live demo of the application: https://www.linkedin.com/in/shubham-karekar-167201205/#:~:text=Projects-,Mobile%20Application%20for%20Visually%20Impaired%20Individuals,-Mobile%20Application%20for
 
