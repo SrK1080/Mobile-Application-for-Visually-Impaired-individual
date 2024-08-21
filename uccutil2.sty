@@ -1,0 +1,88 @@
+\let\ucc@old@date=\date
+\renewcommand\date[1]{\ucc@old@date{#1}\def\ucc@date{#1}}
+\let\ucc@old@author=\author
+\renewcommand\author[1]{\ucc@old@author{#1}\def\ucc@author{#1}}
+\let\ucc@old@title=\title
+\renewcommand\title[1]{\ucc@old@title{#1}\def\ucc@title{#1}}
+
+\title{\textcolor{red}{\Large{Title not defined. Define it with \texttt{\textbackslash title} command in preamble.}}}
+\author{A\textcolor{red}{\Large{author not defined. Define it with \texttt{\textbackslash author} command in preamble.}}}
+
+\newif\ifucc@abstract
+\ucc@abstractfalse
+\long\def\abstract#1{\ucc@abstracttrue\long\def\ucc@abstract@text{#1}}
+\def\ucc@make@abstract{%
+    \cleardoublepage%
+    \ifucc@abstract%
+        \small
+        \begin{center}%
+          {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \begin{quotation}%
+        \ucc@abstract@text%
+        \end{quotation}%
+    \else%
+        \chapter*{No Abstract Provided}
+        No abstract defined.
+        Use the \texttt{\textbackslash abstract} command to
+         define the abstract in the document preamble.
+    \fi%
+}
+
+% From classicthesis
+\DeclareRobustCommand{\ucc@spacedallcaps}[1]{\textls[160]{\MakeTextUppercase{#1}}}%
+\DeclareRobustCommand{\ucc@spacedlowsmallcaps}[1]{\textls[80]{\scshape\MakeTextLowercase{#1}}}%
+\def\ucc@make@title@page{%
+\begin{titlepage}
+\changetext{}{}{}{((\paperwidth  - \textwidth) / 2) - \oddsidemargin - \hoffset - 1in}{}
+\null\vfill
+    \begin{center}
+        \large  
+        \hfill
+        \vfill
+        \begingroup
+            \color{Maroon}\ucc@spacedallcaps{\@title} \\ \bigskip
+        \endgroup
+        Submitted by: \\\medskip
+        \ucc@spacedlowsmallcaps{\@author}
+        \\\bigskip
+        Supervisor:\\\medskip
+        \ucc@spacedlowsmallcaps{\ucc@get@supervisor}\\\medskip
+        Second Reader:\\\medskip
+        \ucc@spacedlowsmallcaps{\ucc@get@second@reader}
+        \vfill
+        \includegraphics[width=6cm]{Figures/ColourCrest} \\ \medskip
+        \ucc@degree \\ \medskip   
+        \ucc@department \\                            
+        %\myFaculty \\
+        \ucc@university@name \\ \bigskip
+        \ucc@date
+        \ifucc@draft%
+            \begin{tikzpicture}[remember picture,overlay]
+            \node[rotate=60,scale=10,text opacity=0.2]
+                 at (current page.center) {Draft};
+            \end{tikzpicture}
+        \fi%
+        \vfill                      
+    \end{center}        
+\end{titlepage}
+\clearpage
+%
+\thispagestyle{empty}
+\hfill
+\vfill
+\noindent\@author: \textit{\@title,} \ucc@degree, \textcopyright\ \ucc@date
+}
+
+\def\ucc@make@declaration{%
+    \cleardoublepage%
+    \vfill
+    \chapter*{Declaration}
+       I confirm that, except where indicated through the proper use of citations
+        and references, this is my original work and that I have not submitted it
+        for any other course or degree.\\[12mm]
+       Signed: \hrulefill\\[12mm]%
+       \makebox[\textwidth]{\hfill\@author}\\%
+       \makebox[\textwidth]{\hfill\@date}%
+    \vfill
+}
